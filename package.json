@@ -7,7 +7,7 @@
     "start": "node dist/server.js",
     "dev": "nodemon --watch src --exec babel-node --presets @babel/env src/server.js",
     "build": "babel src -d dist --source-maps inline --copy-files",
-    "heroku-postbuild": "npm run build && NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "heroku-postbuild": "npm install babel-cli -S && npm run build && NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],
   "author": "",
