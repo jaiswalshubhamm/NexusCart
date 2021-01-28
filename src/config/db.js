@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 export default {
   /**
    * Here you may specify which of the database connections below you wish

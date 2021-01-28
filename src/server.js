@@ -2,13 +2,13 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 
-//Importing Routes
-import productRouter from './src/routers/productRouter';
-import userRouter from './src/routers/userRouter';
-import orderRouter from './src/routers/orderRouter';
-import uploadRouter from './src/routers/uploadRouter';
-
 dotenv.config();
+
+//Importing Routes
+import productRouter from './routers/productRouter';
+import userRouter from './routers/userRouter';
+import orderRouter from './routers/orderRouter';
+import uploadRouter from './routers/uploadRouter';
 
 const app = express();
 app.use(express.json());

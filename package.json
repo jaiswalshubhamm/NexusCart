@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js --exec babel-node --presets @babel/env",
-    "dev": "nodemon --exec babel-node --presets @babel/env server.js",
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch src --exec babel-node --presets @babel/env src/server.js",
+    "build": "babel src -d dist --source-maps inline --copy-files",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],

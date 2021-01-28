@@ -4,59 +4,55 @@ import data from '../data';
 
 const Op = db.Sequelize.Op;
 
-export const getProducts =
-    // asyncHandler(
-    async (req, res) => {
-        const pageSize = 5;
-        const page = Number(req.query.pageNumber) || 1;
+export const getProducts = asyncHandler(async (req, res) => {
+    const pageSize = 5;
+    const page = Number(req.query.pageNumber) || 1;
 
-        const nameLike = req.query.name || '';
-        const name = { [Op.like]: `%${nameLike}%` };
+    const nameLike = req.query.name || '';
+    const name = { [Op.like]: `%${nameLike}%` };
 
-        const category = req.query.category || '';
-        // const seller = req.query.seller || '';
-        const order = req.query.order || '';
+    const category = req.query.category || '';
+    // const seller = req.query.seller || '';
+    const order = req.query.order || '';
 
-        const min = req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
-        const max = req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0;
-        const price = { [Op.gte]: min, [Op.lte]: max };
+    const min = req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
+    const max = req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0;
+    const price = { [Op.gte]: min, [Op.lte]: max };
 
-        const ratingRange =
-            req.query.rating && Number(req.query.rating) !== 0
-                ? Number(req.query.rating)
-                : 0;
-        const rating = { [Op.gte]: ratingRange };
+    const ratingRange =
+        req.query.rating && Number(req.query.rating) !== 0
+            ? Number(req.query.rating)
+            : 0;
+    const rating = { [Op.gte]: ratingRange };
 
-        const nameFilter = name ? { name } : {};
-        const categoryFilter = category ? { category } : {};
-        const priceFilter = (min !== 0) && (max !== 0) ? { price } : {};
-        // const sellerFilter = seller ? { seller } : {};
-        const ratingFilter = (rating !== 0) ? { rating } : {};
-        const sortOrder =
-            order === 'lowest'
-                ? [['price', 'DESC']]
-                : order === 'highest'
-                    ? [['price', 'ASC']]
-                    : order === 'toprated'
-                        ? [['rating', 'DESC']]
-                        : [];
-        console.log(sortOrder);
-        const products = await db.Product.findAndCountAll({
-            where: {
-                ...categoryFilter,
-                ...nameFilter,
-                ...priceFilter,
-                ...ratingFilter,
-            },
-            // order: sortOrder,
-            offset: pageSize * (page - 1),
-            limit: pageSize,
-        })
-        const pages = Math.ceil(products.count / pageSize);
-        console.log(pages);
-        res.send(products.rows, page, pages);
-    }
-// )
+    const nameFilter = name ? { name } : {};
+    const categoryFilter = category ? { category } : {};
+    const priceFilter = (min !== 0) && (max !== 0) ? { price } : {};
+    // const sellerFilter = seller ? { seller } : {};
+    const ratingFilter = (rating !== 0) ? { rating } : {};
+    const sortOrder =
+        order === 'lowest'
+            ? [['price', 'DESC']]
+            : order === 'highest'
+                ? [['price', 'ASC']]
+                : order === 'toprated'
+                    ? [['rating', 'DESC']]
+                    : [];
+    console.log(sortOrder);
+    const products = await db.Product.findAndCountAll({
+        where: {
+            ...categoryFilter,
+            ...nameFilter,
+            ...priceFilter,
+            ...ratingFilter,
+        },
+        // order: sortOrder,
+        offset: pageSize * (page - 1),
+        limit: pageSize,
+    })
+    const pages = Math.ceil(products.count / pageSize);
+    res.send(products.rows, page, pages);
+});
 
 export const getCategories = asyncHandler(async (req, res) => {
     await db.Product.findAll({ attributes: ['category'], raw: true, group: ['category'] })
@@ -138,7 +134,6 @@ export const createReview = asyncHandler(async (req, res) => {
         }],
     });
     if (product) {
-        console.log(product.reviews);
         if (product.reviews.find((x) => x.name === req.user.name)) {
             return res.status(400).send({ message: 'You already submitted a review' });
         }
