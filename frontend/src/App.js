@@ -62,7 +62,7 @@ function App() {
               <i className="fa fa-bars"></i>
             </button>
             <Link className="brand" to="/">
-              Meri Dukan
+              My Shop
             </Link>
           </div>
           <div>
